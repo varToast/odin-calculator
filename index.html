@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class = "centerBox">
+        <div class = "display">
+            <span id="displayValue"></span>
+        </div>
+        <div class = "controls">
+            <div class = "numbers">
+                <div class = "column">
+                    <button class = "number" onclick="assignValue(7)">7</button>
+                    <button class = "number" onclick="assignValue(4)">4</button>
+                    <button class = "number" onclick="assignValue(1)">1</button>
+                    <button class = "number" onclick="assignValue(0)">0</button>
+                </div>
+                <div class = "column">
+                    <button class = "number" onclick="assignValue(8)">8</button>
+                    <button class = "number" onclick="assignValue(5)">5</button>
+                    <button class = "number" onclick="assignValue(2)">2</button>
+                    <button class = "number" onclick="assignValue('.')">.</button>
+                </div>
+                <div class = "column">
+                    <button class = "number" onclick="assignValue(9)">9</button>
+                    <button class = "number" onclick="assignValue(6)">6</button>
+                    <button class = "number" onclick="assignValue(3)">3</button>
+                    <button class = "number" onclick="onDel()">del</button>
+                </div>
+            </div>
+            <div class = "operators column">
+                <button class = "number" onclick="onOperator('/')">/</button>
+                <button class = "number" onclick="onOperator('*')">*</button>
+                <button class = "number" onclick="onOperator('-')">-</button>
+                <button class = "number" onclick="onOperator('+')">+</button>
+            </div>
+            <div class = "column">
+                <button class = "number" onclick="onClear()">Clear</button>
+                <button class = "number" onclick="onOperator('=')">=</button>
+        </div>
+    </div>
+    <script>
+let displayOutput = document.querySelector("#displayValue");
+let number = document.querySelector(".column")
+let operator = ['+'];
+let awaitingOperator = false;
+let assigningValue = true;
+let runningTotal = 0;
+let displayContent = '';
+let stringValue = "";
+let valueArray = [0];
+
+displayOutput.textContent = displayContent;
+
+
+number.addEventListener('click', assignValue(number.value))
+
+// creates string of input value, stringValue
+function assignValue(value){
+    value = value.toString();
+    if (assigningValue === true){
+        stringValue += value;
+        console.log(stringValue);
+    } else{
+        stringValue = value;
+        assigningValue = true;
+    }
+    displayValue(stringValue);
+}
+function onOperator(operation){
+    assigningValue = false;
+    operator.unshift(operation);
+    valueArray.unshift(parseFloat(evaluate(valueArray[0], operator[1], parseFloat(stringValue))));
+    displayValue(valueArray[0]);
+}
+function onDel(){
+    stringValue = '';
+    console.log(stringValue, valueArray);
+    displayValue(stringValue);
+}
+
+function onClear(){
+    valueArray = [0];
+    operator = ['+'];
+    stringValue = '';
+    console.log(valueArray);
+    displayValue(stringValue);
+}
+
+function evaluate(value1, operator, value2){
+    (operator === "=") ? runningTotal = value1 :
+    (operator === "+") ? runningTotal = value1 + value2 :
+    (operator === "-") ? runningTotal = value1 - value2 :
+    (operator === "*") ? runningTotal = value1 * value2 :
+    runningTotal = value1 / value2;    
+    console.log(runningTotal);
+    return runningTotal;
+}
+function displayValue(value){
+    displayOutput.textContent = value;
+
+}
+
+console.log(evaluate(value1, operator, value2));
+
+
+    </script>
+</body>
+</html>

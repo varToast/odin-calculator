@@ -1,0 +1,40 @@
+body{
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.centerBox{
+    display: flex;
+    padding: auto;
+    justify-content: center;
+    height: 500px;
+    width: 500px;
+    flex-direction: column;
+}
+.display{
+    height: 80px;
+    background-color: coral;
+}
+.controls{
+    width: 100%;
+    display: flex;
+}
+.numbers{
+    display: flex;
+    flex-grow: 1;
+}
+.column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.operators{
+    flex-grow: 1;
+}
+button{
+    flex-grow: 1;
+}
