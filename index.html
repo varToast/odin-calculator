@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"><charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>odin calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -47,17 +49,14 @@
     </div>
     <script>
 let displayOutput = document.querySelector("#displayValue");
-let number = document.querySelector(".column")
-let operator = [''];
-let assigningValue = true;
-let runningTotal = 0;
+let operator = []; //operators are added to an array to allow evaluate() to evaluate preceding terms after a new operator has been pressed
+let assigningValue = true; //true enables concat on stringValue; false rests stringValue to last input
+let awaitingOperator = true; //lockout to prevent bugs with duplicate operator input
+let runningTotal = 0; //result of evaluate(), used as first expression value when operator is used immediately after evaluation is triggered
 let displayContent = '';
-let stringValue = "";
-let valueArray = [];
-let awaitingOperator = true;
-
-displayOutput.textContent = displayContent;
-
+let stringValue = ""; //constructs value from button or keyboard input
+let valueArray = []; //pushes new values to the front ([0]), used to free up runningTotal and stringValue for new numbers
+// displayOutput.textContent = displayContent;
 // keyboard input for numbers, operators, and backspace:
 document.addEventListener('keydown', function(event){
     event.preventDefault();
@@ -86,8 +85,7 @@ function onDel(){
     displayValue(stringValue);
 }
 number.addEventListener('click', assignValue(number.value))
-
-// creates string of input value, stringValue
+// concatenates input to stringValue
 function assignValue(value){
     value = value.toString();
     if (assigningValue === true){
@@ -98,10 +96,14 @@ function assignValue(value){
         stringValue = value;
         assigningValue = true;
     }
-    displayValue(stringValue);
     awaitingOperator = true;
+    displayValue(stringValue);
 }
 function onOperator(operation){
+    if (stringValue === ''){
+        return;
+    }
+    //handles first operation when valueArray doesn't have an initial value to operate with
     if (valueArray.length < 1){
         valueArray.unshift(parseFloat(stringValue));
     }
@@ -109,32 +111,27 @@ function onOperator(operation){
     assigningValue = false;
     operator.unshift(operation);
     valueArray.unshift(parseFloat(evaluate(valueArray[0], operator[1], parseFloat(stringValue))));
-    displayValue(valueArray[0]);
     awaitingOperator = false;
-    }
-    else {
-        void(0);
+    displayValue(valueArray[0]);
     }
 }
 function onEquals(operation){
     assigningValue = false;
     operator.unshift(operation);
     valueArray.unshift(parseFloat(evaluate(valueArray[0], operator[1], parseFloat(stringValue))));
-    displayValue(valueArray[0]);    
-    stringValue = ('');
+    stringValue = (valueArray[0]);
     awaitingOperator = true;
+    displayValue(stringValue);  
 }
 function onClear(){
-    valueArray = [0];
-    operator = ['+'];
+    valueArray = [];
+    operator = [];
     stringValue = '';
-    console.log(valueArray);
-    displayValue(stringValue);
     awaitingOperator = true;
+    displayValue(stringValue);
 }
 function isNegative(){
-    stringValue = '-' + stringValue;
-    console.log(stringValue);
+    stringValue = (parseFloat(stringValue)-(2*(parseFloat(stringValue))));
     displayValue(stringValue);
 }
 function evaluate(value1, operator, value2){
@@ -144,10 +141,9 @@ function evaluate(value1, operator, value2){
     (operator === "-") ? runningTotal = value1 - value2 :
     (operator === "*") ? runningTotal = value1 * value2 :
     runningTotal = value1 / value2;    
-    console.log(runningTotal);
-    console.log(valueArray);
     return runningTotal;
     }
+    // identity property in case of no runningTotal value
     else {
     runningTotal = value2; 
     return runningTotal;
@@ -155,7 +151,6 @@ function evaluate(value1, operator, value2){
 }
 function displayValue(value){
     displayOutput.textContent = value;
-
 }
 console.log(evaluate(value1, operator, value2));
     </script>
