@@ -6,6 +6,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #7CC6FE;
 }
 .centerBox{
     display: flex;
@@ -17,7 +18,12 @@ body{
 }
 .display{
     height: 80px;
-    background-color: coral;
+    background-color: #CCD5FF;
+    border-color: #23C9FF;
+    border-width: 10px;
+    display: flex;
+    align-items: end;
+    justify-content: end;
 }
 .controls{
     width: 100%;
@@ -25,16 +31,38 @@ body{
 }
 .numbers{
     display: flex;
-    flex-grow: 1;
+    flex: 1 1 auto;
 }
 .column {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: auto;
+    flex-grow: 1;
 }
 .operators{
-    flex-grow: 1;
+    flex: 1 0 0;
 }
-button{
+button,#blank{
+    flex: 1 1 0;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 0;
+    border-color: #c884a6;
+    border-width: 2px;
+    border-style: solid;
+    background-color: #e7bbe3;
+}
+button:hover{
+    background-color: #c884a6;
+}
+.number {
     flex-grow: 1;
+    height: 100%;
+}
+#displayValue{
+    padding: 10px;
+    font-size: 20px;
+}
+#equals{
+    flex-grow: 3;
 }

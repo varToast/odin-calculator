@@ -29,7 +29,7 @@
                     <button class = "number" onclick="assignValue(9)">9</button>
                     <button class = "number" onclick="assignValue(6)">6</button>
                     <button class = "number" onclick="assignValue(3)">3</button>
-                    <button class = "number" onclick="onDel()">del</button>
+                    <button class = "number" onclick="isNegative()">+/-</button>
                 </div>
             </div>
             <div class = "operators column">
@@ -39,8 +39,10 @@
                 <button class = "number" onclick="onOperator('+')">+</button>
             </div>
             <div class = "column">
-                <button class = "number" onclick="onClear()">Clear</button>
-                <button class = "number" onclick="onEquals('=')">=</button>
+                <button class = "number" onclick="onClear()">clear</button>
+                <button class = "number" onclick="onDel()">del</button>
+                <button class = "number" id="equals" onclick="onEquals('=')">=</button>
+                
         </div>
     </div>
     <script>
@@ -51,7 +53,7 @@ let assigningValue = true;
 let runningTotal = 0;
 let displayContent = '';
 let stringValue = "";
-let valueArray = [0];
+let valueArray = [];
 let awaitingOperator = true;
 
 displayOutput.textContent = displayContent;
@@ -69,6 +71,7 @@ document.addEventListener('keydown', function(event){
     (event.shiftKey == false && event.keyCode == 56)? assignValue(8) :
     (event.keyCode == 57)? assignValue(9) :
     (event.keyCode == 48)? assignValue(0) :
+    (event.keyCode == 190)? assignValue('.') :
     (event.keyCode == 13)? onEquals('=') :
     (event.keyCode == 8)? onDel() :
     (event.shiftKey == true && event.keyCode == 56)? onOperator('*') :
@@ -90,6 +93,7 @@ function assignValue(value){
     if (assigningValue === true){
         stringValue += value;
         console.log(stringValue);
+        console.log(valueArray);
     } else{
         stringValue = value;
         assigningValue = true;
@@ -98,6 +102,9 @@ function assignValue(value){
     awaitingOperator = true;
 }
 function onOperator(operation){
+    if (valueArray.length < 1){
+        valueArray.unshift(parseFloat(stringValue));
+    }
     if (awaitingOperator == true){
     assigningValue = false;
     operator.unshift(operation);
@@ -108,7 +115,6 @@ function onOperator(operation){
     else {
         void(0);
     }
-    
 }
 function onEquals(operation){
     assigningValue = false;
@@ -118,13 +124,6 @@ function onEquals(operation){
     stringValue = ('');
     awaitingOperator = true;
 }
-
-// function onDel(){
-//     stringValue = '';
-//     console.log(stringValue, valueArray);
-//     displayValue(stringValue);
-// }
-
 function onClear(){
     valueArray = [0];
     operator = ['+'];
@@ -133,24 +132,32 @@ function onClear(){
     displayValue(stringValue);
     awaitingOperator = true;
 }
-
+function isNegative(){
+    stringValue = '-' + stringValue;
+    console.log(stringValue);
+    displayValue(stringValue);
+}
 function evaluate(value1, operator, value2){
+    if (valueArray.length >1){
     (operator === "=") ? runningTotal = value1 :
     (operator === "+") ? runningTotal = value1 + value2 :
     (operator === "-") ? runningTotal = value1 - value2 :
     (operator === "*") ? runningTotal = value1 * value2 :
     runningTotal = value1 / value2;    
     console.log(runningTotal);
+    console.log(valueArray);
     return runningTotal;
+    }
+    else {
+    runningTotal = value2; 
+    return runningTotal;
+    }
 }
 function displayValue(value){
     displayOutput.textContent = value;
 
 }
-
 console.log(evaluate(value1, operator, value2));
-
-
     </script>
 </body>
 </html>
