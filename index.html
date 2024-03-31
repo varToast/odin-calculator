@@ -40,23 +40,48 @@
             </div>
             <div class = "column">
                 <button class = "number" onclick="onClear()">Clear</button>
-                <button class = "number" onclick="onOperator('=')">=</button>
+                <button class = "number" onclick="onEquals('=')">=</button>
         </div>
     </div>
     <script>
 let displayOutput = document.querySelector("#displayValue");
 let number = document.querySelector(".column")
-let operator = ['+'];
-let awaitingOperator = false;
+let operator = [''];
 let assigningValue = true;
 let runningTotal = 0;
 let displayContent = '';
 let stringValue = "";
 let valueArray = [0];
+let awaitingOperator = true;
 
 displayOutput.textContent = displayContent;
 
-
+// keyboard input for numbers, operators, and backspace:
+document.addEventListener('keydown', function(event){
+    event.preventDefault();
+    (event.keyCode == 49)? assignValue(1) :
+    (event.keyCode == 50)? assignValue(2) :
+    (event.keyCode == 51)? assignValue(3) :
+    (event.keyCode == 52)? assignValue(4) :
+    (event.keyCode == 53)? assignValue(5) :
+    (event.keyCode == 54)? assignValue(6) :
+    (event.keyCode == 55)? assignValue(7) :
+    (event.shiftKey == false && event.keyCode == 56)? assignValue(8) :
+    (event.keyCode == 57)? assignValue(9) :
+    (event.keyCode == 48)? assignValue(0) :
+    (event.keyCode == 13)? onEquals('=') :
+    (event.keyCode == 8)? onDel() :
+    (event.shiftKey == true && event.keyCode == 56)? onOperator('*') :
+    (event.shiftKey == true && event.keyCode == 61)? onOperator('+') :
+    (event.keyCode == 173)? onOperator('-') :
+    (event.keyCode == 191)? onOperator('/') :
+    (event.shiftKey == false && event.keyCode == 61)? onEquals('=') :
+    void(0);
+})
+function onDel(){
+    stringValue = stringValue.slice(0, (stringValue.length-1));
+    displayValue(stringValue);
+}
 number.addEventListener('click', assignValue(number.value))
 
 // creates string of input value, stringValue
@@ -70,18 +95,35 @@ function assignValue(value){
         assigningValue = true;
     }
     displayValue(stringValue);
+    awaitingOperator = true;
 }
 function onOperator(operation){
+    if (awaitingOperator == true){
     assigningValue = false;
     operator.unshift(operation);
     valueArray.unshift(parseFloat(evaluate(valueArray[0], operator[1], parseFloat(stringValue))));
     displayValue(valueArray[0]);
+    awaitingOperator = false;
+    }
+    else {
+        void(0);
+    }
+    
 }
-function onDel(){
-    stringValue = '';
-    console.log(stringValue, valueArray);
-    displayValue(stringValue);
+function onEquals(operation){
+    assigningValue = false;
+    operator.unshift(operation);
+    valueArray.unshift(parseFloat(evaluate(valueArray[0], operator[1], parseFloat(stringValue))));
+    displayValue(valueArray[0]);    
+    stringValue = ('');
+    awaitingOperator = true;
 }
+
+// function onDel(){
+//     stringValue = '';
+//     console.log(stringValue, valueArray);
+//     displayValue(stringValue);
+// }
 
 function onClear(){
     valueArray = [0];
@@ -89,6 +131,7 @@ function onClear(){
     stringValue = '';
     console.log(valueArray);
     displayValue(stringValue);
+    awaitingOperator = true;
 }
 
 function evaluate(value1, operator, value2){
