@@ -72,6 +72,7 @@ document.addEventListener('keydown', function(event){
     (event.keyCode == 48)? assignValue(0) :
     (event.keyCode == 190)? assignValue('.') :
     (event.keyCode == 13)? onEquals('=') :
+    (event.keyCode == 67)? onClear() :
     (event.keyCode == 8)? onDel() :
     (event.shiftKey == true && event.keyCode == 56)? onOperator('*') :
     (event.shiftKey == true && event.keyCode == 61)? onOperator('+') :
